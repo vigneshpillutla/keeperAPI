@@ -8,7 +8,7 @@ import cors from "cors";
 
 const app = express();
 var corsOptions = {
-    origin: 'http://localhost:3000',
+    origin: '*',
     credentials: true
   }
 app.use(cors(corsOptions));
@@ -42,7 +42,14 @@ passport.use(User.createStrategy());
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-
+function noteFilter(elem){
+    const {_id,key,title,content} = elem;
+    return {
+        key:key,
+        title:title,
+        content:content
+    };
+}
 // LOGIN AUTHENTICATION
 
 
@@ -96,16 +103,17 @@ const Note = mongoose.model("Note",noteSchema)
 // ADDING NEW NOTE TO DATA BASE
 app.put("/user",(req,res)=>{
     const {email,newNote} = req.body;
+    console.log(newNote);
     Note.findOneAndUpdate({email:email},
         {$push:{"notes":newNote}},
         {safe: true, upsert: true, new : true},
         (err,model)=>{
             if(err){
                 console.log(err);
-                res.send("Unable to add note!");
+                res.json({responseText:"Unable to add note!"});
             }
             else{
-                res.send("Note Added!");
+                res.json({responseText:"Note Added!"});
             }
         }
     );
@@ -119,10 +127,10 @@ app.patch("/user",(req,res)=>{
         (err,model)=>{
             if(err){
                 console.log(err);
-                res.send("Unable to modify note!");
+                res.json({responseText:"Unable to modify note!"});
             }
             else{
-                res.send("Note Modified!");
+                res.json({responseText:"Note Modified!"});
             }
         }
 
@@ -137,10 +145,10 @@ app.delete("/user",(req,res)=>{
         (err,model)=>{
             if(err){
                 console.log(err);
-                res.send("Unable to delete note!");
+                res.json({responseText:"Unable to delete note!"});
             }
             else{
-                res.send("Note deleted!");
+                res.json({responseText:"Note Deleted!"});
             }
         }
 
@@ -148,12 +156,16 @@ app.delete("/user",(req,res)=>{
 });
 //SENDING ALL NOTES RELATED TO USER
 app.get("/user",(req,res)=>{
-    Note.findOne({email:req.body.email},(err,notes)=>{
+    Note.findOne({email:req.query.email},(err,notes)=>{
         if(err){
             res.json({});
         }
         else{
-            res.json(notes.notes);
+            let filteredNotes = []
+            if(notes!==null){
+                filteredNotes = (notes.notes).map(noteFilter);
+            }
+            res.json(filteredNotes);
         }
     });
 });
