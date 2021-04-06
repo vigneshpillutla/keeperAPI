@@ -8,7 +8,7 @@ import cors from "cors";
 
 const app = express();
 var corsOptions = {
-    origin: '*',
+    origin: 'http://localhost:3000',
     credentials: true
   }
 app.use(cors(corsOptions));
@@ -73,6 +73,9 @@ app.post("/register",(req,res)=>{
 
 
 });
+app.get("/isLoggedIn",(req,res)=>{
+    res.send({user:req.user});
+})
 app.post("/login",(req,res)=>{
     const user = new User({
         email: req.body.email,
