@@ -16,7 +16,10 @@ const sessionStore = MongoStore.create({
     collectionName:'sessions'
 });
 
-app.use(cors());
+app.use(cors({
+    origin:'http://localhost:3000',
+    credentials:true
+}));
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(session({
@@ -42,7 +45,16 @@ function noteFilter(elem){
     };
 }
 // LOGIN AUTHENTICATION
-
+app.get('/loginStatus',(req,res)=>{
+    if(req.isAuthenticated()){
+        const {firstName,lastName,email,notes} = req.user;
+        res.status(200).json({loggedIn:true,msg:"Successfully logged in!",user:{firstName,lastName,email,notes}});
+    }
+    else{
+        console.log(req.session);
+        res.status(401).json({loggedIn:false,msg:"Login failed!!"});
+    }
+})
 app.post('/register',(req,res)=>{
     const newUser = new User({
         firstName:req.body.firstName,
@@ -55,21 +67,29 @@ app.post('/register',(req,res)=>{
         }
         else{
             passport.authenticate('local')(req,res,()=>{
-                res.status(200).json({loggedIn:true,msg:"Successfully logged in!",notes:req.user.notes});
+                res.status(200).json({loggedIn:true,msg:"Successfully registered in!",notes:[]});
             })
         }
     })
 });
 
-app.post('/login',passport.authenticate('local'),(req,res)=>{
-    res.status(200).json({loggedIn:true,msg:"Successfully logged in!",notes:req.user.notes});
-})
+app.post('/login',passport.authenticate('local',{failWithError:true}),(req,res,next)=>{
+        const {firstName,lastName,email,notes} = req.user;
+        console.log(req.session);
+        res.status(200).json({loggedIn:true,msg:"Successfully logged in!",user:{firstName,lastName,email,notes}});
+    },
+    (err,req,res,next)=>{
+        res.status(401).json({loggedIn:false,msg:"Login failed!!"});
+    }
+
+)
 // STORING AND MODIFYING THE NOTES
 
 // ADDING NEW NOTE TO DATA BASE
 app.put("/user",(req,res)=>{
     const {email,newNote} = req.body;
-    console.log(newNote);
+    // console.log(email,newNote);
+    // res.json("did something!");
     User.findOneAndUpdate({email:email},
         {$push:{"notes":newNote}},
         {safe: true, upsert: true, new : true},
@@ -86,7 +106,8 @@ app.put("/user",(req,res)=>{
 });
 //MODIFYING AN EXISTING NOTE
 app.patch("/user",(req,res)=>{
-    const {email,newNote} = req.body;
+    const {email,noteData:newNote} = req.body;
+    console.log(req.body);
     User.findOneAndUpdate({email:email,"notes.key":newNote.key},
         {$set:{"notes.$.title":newNote.title,"notes.$.content":newNote.content}},
         {safe: true, upsert: true, new : true},
@@ -103,8 +124,8 @@ app.patch("/user",(req,res)=>{
     );
 });
 //DELETING A NOTE USING KEY
-app.delete("/user",(req,res)=>{
-    const {email,key} = req.query;
+app.delete("/user/:email/:key",(req,res)=>{
+    const {email,key} = req.params;
     User.findOneAndUpdate({email:email},
         {$pull:{notes:{key:key}}},
         {safe: true, upsert: true, new : true},
