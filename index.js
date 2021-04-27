@@ -44,16 +44,21 @@ function noteFilter(elem){
         content:content
     };
 }
+
+
 // LOGIN AUTHENTICATION
 app.get('/loginStatus',(req,res)=>{
     if(req.isAuthenticated()){
         const {firstName,lastName,email,notes} = req.user;
-        res.status(200).json({loggedIn:true,msg:"Successfully logged in!",user:{firstName,lastName,email,notes}});
+        res.json({loggedIn:true,msg:"Successfully logged in!",user:{firstName,lastName,email,notes}});
     }
     else{
-        console.log(req.session);
-        res.status(401).json({loggedIn:false,msg:"Login failed!!"});
+        res.json({loggedIn:false,msg:"Login failed!!"});
     }
+})
+app.get('/logout',(req,res)=>{
+    req.logout();
+    res.json("User logged Out!");
 })
 app.post('/register',(req,res)=>{
     const newUser = new User({
@@ -63,11 +68,12 @@ app.post('/register',(req,res)=>{
     });
     User.register(newUser,req.body.password,(err,user)=>{
         if(err){
-            res.status(401).json({loggedIn:false,msg:'Something went wrong. Try again!'});
+            res.json({loggedIn:false,msg:'Something went wrong. Try again!'});
         }
         else{
             passport.authenticate('local')(req,res,()=>{
-                res.status(200).json({loggedIn:true,msg:"Successfully registered in!",notes:[]});
+                const {firstName,lastName,email,notes} = req.user;
+                res.json({loggedIn:true,msg:"Successfully registered in!",user:{firstName,lastName,email,notes}});
             })
         }
     })
@@ -75,11 +81,10 @@ app.post('/register',(req,res)=>{
 
 app.post('/login',passport.authenticate('local',{failWithError:true}),(req,res,next)=>{
         const {firstName,lastName,email,notes} = req.user;
-        console.log(req.session);
-        res.status(200).json({loggedIn:true,msg:"Successfully logged in!",user:{firstName,lastName,email,notes}});
+        res.json({loggedIn:true,msg:"Successfully logged in!",user:{firstName,lastName,email,notes}});
     },
     (err,req,res,next)=>{
-        res.status(401).json({loggedIn:false,msg:"Login failed!!"});
+        res.json({loggedIn:false,msg:"Login failed!!"});
     }
 
 )
@@ -88,8 +93,6 @@ app.post('/login',passport.authenticate('local',{failWithError:true}),(req,res,n
 // ADDING NEW NOTE TO DATA BASE
 app.put("/user",(req,res)=>{
     const {email,newNote} = req.body;
-    // console.log(email,newNote);
-    // res.json("did something!");
     User.findOneAndUpdate({email:email},
         {$push:{"notes":newNote}},
         {safe: true, upsert: true, new : true},
@@ -107,7 +110,6 @@ app.put("/user",(req,res)=>{
 //MODIFYING AN EXISTING NOTE
 app.patch("/user",(req,res)=>{
     const {email,noteData:newNote} = req.body;
-    console.log(req.body);
     User.findOneAndUpdate({email:email,"notes.key":newNote.key},
         {$set:{"notes.$.title":newNote.title,"notes.$.content":newNote.content}},
         {safe: true, upsert: true, new : true},
