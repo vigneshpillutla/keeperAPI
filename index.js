@@ -137,6 +137,6 @@ app.delete("/user/:email/:key",(req,res)=>{
     );
 });
 
-app.listen(9000,()=>{
+app.listen(process.env.PORT || 9000,()=>{
     console.log("server started at port 9000");
 });
