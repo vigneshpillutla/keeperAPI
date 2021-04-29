@@ -9,11 +9,12 @@ const User = require('./config/database');
 const app = express();
 const db_string = process.env.DB_STRING;
 
-
+console.log(db_string);
 const sessionStore = MongoStore.create({
     mongoUrl:db_string,
     collectionName:'sessions'
 });
+
 const corsOption = {
     origin:'https://keep-er.netlify.app',
 }
