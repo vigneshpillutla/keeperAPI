@@ -15,13 +15,8 @@ const sessionStore = MongoStore.create({
     mongoUrl:db_string,
     collectionName:'sessions'
 });
-app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
 app.use(cors({
-    origin:['http://localhost:3000','https://keep-er.netlify.app'],
+    origin:'https://keep-er.netlify.app',
     credentials:true
 }));
 app.use(express.json());
