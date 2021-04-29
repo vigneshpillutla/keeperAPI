@@ -17,15 +17,11 @@ const sessionStore = MongoStore.create({
 });
 
 app.use(cors({
-    origin:'https://keep-er.netlify.app',
+    origin:'*',
     credentials:true
 }));
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
-app.use((req,res,next)=>{
-    res.header('Access-Control-Allow-Origin', 'https://keep-er.netlify.app');
-  next();
-})
 app.use(session({
     secret:process.env.SECRET,
     resave:false,
