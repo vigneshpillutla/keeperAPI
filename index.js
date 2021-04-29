@@ -1,5 +1,4 @@
 const  express = require( "express");
-const  mongoose = require( "mongoose");
 const  session = require( "express-session");
 const  passport = require( "passport");
 const  cors = require( "cors");
@@ -39,6 +38,7 @@ app.use(passport.session());
 
 
 // LOGIN AUTHENTICATION
+
 app.get('/loginStatus',(req,res)=>{
     if(req.isAuthenticated()){
         const {firstName,lastName,email,notes} = req.user;
