@@ -36,14 +36,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 
-function noteFilter(elem){
-    const {_id,key,title,content} = elem;
-    return {
-        key:key,
-        title:title,
-        content:content
-    };
-}
+
 
 
 // LOGIN AUTHENTICATION
