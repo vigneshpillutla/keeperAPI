@@ -9,7 +9,7 @@ const User = require('./config/database');
 const app = express();
 const db_string = process.env.DB_STRING;
 
-
+app.set('trust proxy', 1);
 const sessionStore = MongoStore.create({
     mongoUrl:db_string,
     collectionName:'sessions'
@@ -29,6 +29,7 @@ app.use(session({
     store:sessionStore,
     cookie:{
         maxAge:2629800000,
+        sameSite:'none',
         secure:true
     }
 }));
