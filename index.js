@@ -29,6 +29,7 @@ app.use(session({
     store:sessionStore,
     cookie:{
         maxAge:2629800000,
+        secure:true
     }
 }));
 require('./config/passport');
