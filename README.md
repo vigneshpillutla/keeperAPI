@@ -1,6 +1,6 @@
-# Login API
+# Keeper API
 
-### _API for Login Authentication using OAuth and Sessions._
+### _API for Keeper._
 
 ### _This API is written using TypeScript and tested using Jest._
 
