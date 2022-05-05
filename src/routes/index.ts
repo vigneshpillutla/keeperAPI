@@ -3,10 +3,12 @@ import mongoose from 'mongoose';
 import { FailedRequest } from '../utils/error';
 import { sendToken } from '../utils';
 import auth from './auth';
+import notes from './notes';
 // import socialAuth from './socialAuth';
 
 const router = express.Router();
 router.use('/api/auth', auth);
+router.use('/api/notes', notes);
 
 //   ************** Temporarily disabling OAuth ***************
 // router.use('/api/oauth', socialAuth);

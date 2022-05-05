@@ -10,7 +10,7 @@ const auth = `${serverDomain}/auth`;
 const notesDomain = `${serverDomain}/notes`;
 
 const TestUserUtil = new TestUser();
-const TestNotesUtil = new TestNotes();
+const TestNotesUtil = new TestNotes(1);
 
 const agent = request.agent(app);
 
@@ -37,7 +37,7 @@ describe('Notes', () => {
     return expect(response.statusCode).toBe(200);
   });
 
-  xit('should insert multiple notes', async () => {
+  it('should insert multiple notes', async () => {
     for (const note of dummyNotes) {
       const response = await agent.post(`${notesDomain}`).send(note);
       expect(response.statusCode).toBe(200);
