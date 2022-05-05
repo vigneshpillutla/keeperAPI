@@ -42,7 +42,7 @@ const getUser = asyncHandler(async (req, res, next) => {
 const signUpUser = asyncHandler(async (req, res, next) => {
   const { firstName, lastName, email, password } = req.body;
   const { salt, hash } = genHashedPassword(password);
-  const existingUser = await User.findOne({ email: email }).exec();
+  const existingUser = await User.findOne({ email: email });
   if (!!existingUser) {
     throw new FailedRequest('User already exists!', 400);
   }
