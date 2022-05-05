@@ -32,7 +32,8 @@
     "passport": "^0.4.1",
     "passport-google-oauth20": "^2.0.0",
     "passport-jwt": "^4.0.0",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@types/cors": "^2.8.12",
@@ -44,6 +45,7 @@
     "@types/passport": "^1.0.7",
     "@types/passport-local": "^1.0.34",
     "@types/supertest": "^2.0.12",
+    "@types/uuid": "^8.3.4",
     "babel-cli": "^6.26.0",
     "jest": "^28.0.2",
     "superagent": "^7.1.3",

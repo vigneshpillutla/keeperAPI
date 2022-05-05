@@ -10,7 +10,7 @@ const auth = `${serverDomain}/auth`;
 const notesDomain = `${serverDomain}/notes`;
 
 const TestUserUtil = new TestUser();
-const TestNotesUtil = new TestNotes(1);
+const TestNotesUtil = new TestNotes();
 
 const agent = request.agent(app);
 
@@ -40,16 +40,24 @@ describe('Notes', () => {
   it('should insert multiple notes', async () => {
     for (const note of dummyNotes) {
       const response = await agent.post(`${notesDomain}`).send(note);
+
+      expect(response.body).toHaveProperty('data.title');
+      expect(response.body).toHaveProperty('data.content');
       expect(response.statusCode).toBe(200);
     }
     return;
   });
 
-  xit('should retrieve all the user notes', async () => {
+  it('should retrieve all the user notes', async () => {
     const response = await agent.get(`${notesDomain}`);
-    return expect(response.body).toBe({
-      success: true,
-      data: TestNotesUtil.getNotes()
+    const notes = response.body.data;
+    expect(response.statusCode).toBe(200);
+    expect(Array.isArray(notes)).toBe(true);
+
+    notes.forEach((note: { id: number; title: string }) => {
+      expect(note).toHaveProperty('title');
+      expect(note).toHaveProperty('content');
     });
+    return;
   });
 });

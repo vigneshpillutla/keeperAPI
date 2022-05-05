@@ -20,4 +20,12 @@ const signUpSchema = loginSchema
   .options({ presence: 'required' })
   .required();
 
-export { loginSchema, signUpSchema };
+const noteSchema = joi
+  .object({
+    title: joi.string(),
+    content: joi.string()
+  })
+  .options({ presence: 'required' })
+  .required();
+
+export { loginSchema, signUpSchema, noteSchema };

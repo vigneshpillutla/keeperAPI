@@ -34,7 +34,6 @@ class TestUser {
 
 class TestNotes {
   #Notes: Array<{
-    id: number;
     title: string;
     content: string;
   }>;
@@ -45,7 +44,7 @@ class TestNotes {
    */
   constructor(notes = 5) {
     this.#Notes = Array.from({ length: notes }, (value, index) => ({
-      id: index,
+      // id: index,
       title: `Note ${index}`,
       content: `Auto generated content for note ${index}`
     }));
@@ -56,7 +55,7 @@ class TestNotes {
   }
 
   getNote(id: number) {
-    return this.#Notes.find((note) => note.id === id);
+    // return this.#Notes.find((note) => note.id === id);
   }
 }
 

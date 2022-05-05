@@ -1,5 +1,7 @@
+import { RequestHandler } from 'express';
 import asyncHandler from 'express-async-handler';
-import { loginSchema, signUpSchema } from './schemas';
+import { FailedRequest } from '../utils/error';
+import { loginSchema, noteSchema, signUpSchema } from './schemas';
 
 const validateLogin = asyncHandler(async (req, res, next) => {
   await loginSchema.validateAsync(req.body);
@@ -11,4 +13,18 @@ const validateSignUp = asyncHandler(async (req, res, next) => {
   next();
 });
 
-export { validateLogin, validateSignUp };
+const validateNote = asyncHandler(async (req, res, next) => {
+  await noteSchema.validateAsync(req.body);
+
+  next();
+});
+
+const ensureAuthenticated: RequestHandler = (req, res, next) => {
+  if (!req.isAuthenticated()) {
+    throw new FailedRequest('Not authorized', 401);
+  }
+
+  next();
+};
+
+export { validateLogin, validateSignUp, validateNote, ensureAuthenticated };

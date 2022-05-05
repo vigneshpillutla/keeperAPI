@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 interface Note {
-  id: number;
+  id: string;
   title: string;
   conetent: string;
 }
@@ -15,7 +15,7 @@ const NotesSchema = new mongoose.Schema({
   email: String,
   notes: [
     {
-      id: Number,
+      id: String,
       title: String,
       content: String
     }
