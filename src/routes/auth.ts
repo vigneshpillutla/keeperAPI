@@ -19,7 +19,7 @@ router.post(
 
 router.post('/signUp', validateSignUp, signUpUser);
 
-router.get('/getUser', getUser);
+router.get('/user', getUser);
 
 router.get('/logout', logoutUser);
 
