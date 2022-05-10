@@ -72,7 +72,7 @@ describe('Notes', () => {
     const title = 'Modified Note v2.0';
 
     const newNote = {
-      title: 'Modified title'
+      title: 'Modified title',
       content: 'Changed content'
     };
 

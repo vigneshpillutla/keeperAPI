@@ -51,6 +51,7 @@ const getNotes: RequestHandler = asyncHandler(async (req, res) => {
   );
 });
 
+// Handler to update a note based on an id
 const updateNote: RequestHandler = asyncHandler(async (req, res) => {
   const { email } = req.user;
   const noteId = req.params.id;
@@ -77,6 +78,7 @@ const updateNote: RequestHandler = asyncHandler(async (req, res) => {
     new: true
   }).lean();
 
+  // Find the new modified note and send it in the response
   const newNote = newDoc.notes.find((note) => note.id === noteId);
 
   sendToken(
