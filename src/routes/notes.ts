@@ -1,12 +1,14 @@
 import express from 'express';
 import passport from 'passport';
 import { ensureAuthenticated, validateNote } from '../validation';
-import { addNote, getNotes } from '../controllers/notes';
+import { addNote, getNotes, updateNote } from '../controllers/notes';
 
 const router = express.Router();
 
 router.use(ensureAuthenticated);
 
 router.route('/').get(getNotes).post(validateNote, addNote);
+
+router.patch('/:id', updateNote);
 
 export default router;

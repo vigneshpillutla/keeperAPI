@@ -27,11 +27,16 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  return cleanDB();
+  // return cleanDB();
 });
 
 describe('Notes', () => {
   const dummyNotes = TestNotesUtil.getNotes();
+  let singleNote: {
+    id?: string;
+    title: string;
+    content: string;
+  };
   it('should be authenticated', async () => {
     const response = await agent.get(`${auth}/secret`);
     return expect(response.statusCode).toBe(200);
@@ -54,10 +59,25 @@ describe('Notes', () => {
     expect(response.statusCode).toBe(200);
     expect(Array.isArray(notes)).toBe(true);
 
-    notes.forEach((note: { id: number; title: string }) => {
+    notes.forEach((note: { title: string; content: string }) => {
+      singleNote = note;
       expect(note).toHaveProperty('title');
       expect(note).toHaveProperty('content');
     });
     return;
+  });
+
+  it('should update a single note', async () => {
+    const note = TestNotesUtil.getNote(0);
+    const title = 'Modified Note v2.0';
+
+    const response = await agent.patch(`${notesDomain}/${singleNote.id}`).send({
+      title
+    });
+
+    const modifiedNote = response.body.data;
+
+    expect(response.statusCode).toBe(200);
+    return expect(modifiedNote.title).toBe(title);
   });
 });

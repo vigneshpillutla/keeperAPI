@@ -54,8 +54,8 @@ class TestNotes {
     return this.#Notes;
   }
 
-  getNote(id: number) {
-    // return this.#Notes.find((note) => note.id === id);
+  getNote(index: number) {
+    return this.#Notes[index];
   }
 }
 

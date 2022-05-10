@@ -4,13 +4,14 @@ import { RequestHandler } from 'express';
 import { UserNotes, UserNotesDocument } from '../models/notes';
 import { sendToken } from '../utils';
 import { v4 as uuidv4 } from 'uuid';
+import { FailedRequest } from '../utils/error';
 
 const addNote: RequestHandler = asyncHandler(async (req, res) => {
   const { email } = req.user;
   const note = req.body;
   note.id = uuidv4();
 
-  let userNotes: UserNotesDocument & Document = await UserNotes.findOne({
+  let userNotes = await UserNotes.findOne({
     email
   });
 
@@ -49,4 +50,42 @@ const getNotes: RequestHandler = asyncHandler(async (req, res) => {
   );
 });
 
-export { addNote, getNotes };
+const updateNote: RequestHandler = asyncHandler(async (req, res) => {
+  const { email } = req.user;
+  const noteId = req.params.id;
+
+  const filter = {
+    email,
+    'notes.id': noteId
+  };
+  const update: {
+    [key: string]: unknown;
+  } = {};
+
+  Object.entries(req.body).forEach(
+    ([key, value]) => (update[`notes.$.${key}`] = value)
+  );
+
+  const noteExists = await UserNotes.exists(filter);
+
+  if (!noteExists) {
+    throw new FailedRequest('Note not found', 403);
+  }
+
+  const newDoc = await UserNotes.findOneAndUpdate(filter, update, {
+    new: true
+  }).lean();
+
+  const newNote = newDoc.notes.find((note) => note.id === noteId);
+
+  sendToken(
+    {
+      success: true,
+      data: newNote
+    },
+    200,
+    res
+  );
+});
+
+export { addNote, getNotes, updateNote };

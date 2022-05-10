@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { Document } from 'mongoose';
 
 interface Note {
   id: string;
@@ -11,7 +11,7 @@ interface UserNotesDocument {
   notes: Note[];
 }
 
-const NotesSchema = new mongoose.Schema({
+const NotesSchema = new mongoose.Schema<UserNotesDocument>({
   email: String,
   notes: [
     {
@@ -22,6 +22,6 @@ const NotesSchema = new mongoose.Schema({
   ]
 });
 
-const UserNotes = mongoose.model('Notes', NotesSchema);
+const UserNotes = mongoose.model<UserNotesDocument>('Notes', NotesSchema);
 
 export { UserNotes, UserNotesDocument };
