@@ -5,6 +5,7 @@ import { UserNotes, UserNotesDocument } from '../models/notes';
 import { sendToken } from '../utils';
 import { v4 as uuidv4 } from 'uuid';
 import { FailedRequest } from '../utils/error';
+import _ from 'lodash';
 
 const addNote: RequestHandler = asyncHandler(async (req, res) => {
   const { email } = req.user;
@@ -81,7 +82,7 @@ const updateNote: RequestHandler = asyncHandler(async (req, res) => {
   sendToken(
     {
       success: true,
-      data: newNote
+      data: _.omit(newNote, '_id')
     },
     200,
     res

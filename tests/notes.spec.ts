@@ -71,13 +71,31 @@ describe('Notes', () => {
     const note = TestNotesUtil.getNote(0);
     const title = 'Modified Note v2.0';
 
-    const response = await agent.patch(`${notesDomain}/${singleNote.id}`).send({
-      title
-    });
+    const newNote = {
+      title: 'Modified title'
+      content: 'Changed content'
+    };
 
-    const modifiedNote = response.body.data;
+    const response = await agent
+      .patch(`${notesDomain}/${singleNote.id}`)
+      .send(newNote);
+
+    const body = response.body;
+    const modifiedNote = body.data;
 
     expect(response.statusCode).toBe(200);
-    return expect(modifiedNote.title).toBe(title);
+    expect(modifiedNote).toHaveProperty('id');
+    return expect(_.pick(modifiedNote, Object.keys(newNote))).toStrictEqual(
+      newNote
+    );
+  });
+
+  it('should fail to update a note', async () => {
+    const response = await agent.patch(`${notesDomain}/${200}`).send({
+      title: 'Invalid id',
+      content: 'Invalid id'
+    });
+
+    return expect(response.statusCode).toBe(403);
   });
 });

@@ -28,4 +28,7 @@ const noteSchema = joi
   .options({ presence: 'required' })
   .required();
 
-export { loginSchema, signUpSchema, noteSchema };
+const updateNoteSchema = noteSchema.fork(['title', 'content'], (field) =>
+  field.optional()
+);
+export { loginSchema, signUpSchema, noteSchema, updateNoteSchema };
