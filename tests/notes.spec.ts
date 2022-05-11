@@ -27,7 +27,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  // return cleanDB();
+  return cleanDB();
 });
 
 describe('Notes', () => {

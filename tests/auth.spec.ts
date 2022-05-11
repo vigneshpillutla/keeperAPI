@@ -34,7 +34,7 @@ describe('Check if the api is running and configured', () => {
 });
 
 describe('User', () => {
-  let loginPersistanceCookie: string;
+  const agent = request.agent(app);
   const testUser = {
     firstName: 'Test',
     lastName: 'User',
@@ -60,12 +60,11 @@ describe('User', () => {
   });
 
   it('should successfully login', async () => {
-    const response = await request(app)
+    const response = await agent
       .post(`${auth}/login`)
       .send(_.pick(testUser, ['email', 'password']));
     expect(response.statusCode).toBe(200);
     expect(response.headers['set-cookie']).toHaveLength(1);
-    loginPersistanceCookie = response.headers['set-cookie'];
     return expect(response.body).toEqual({
       success: true,
       user: userData
@@ -73,9 +72,7 @@ describe('User', () => {
   });
 
   it('should persist login', async () => {
-    const response = await request(app)
-      .get(`${auth}/secret`)
-      .set('Cookie', loginPersistanceCookie);
+    const response = await agent.get(`${auth}/secret`);
     return expect(response.statusCode).toBe(200);
   });
 
