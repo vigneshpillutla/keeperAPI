@@ -30,6 +30,10 @@ class TestUser {
     }
     return data[valid];
   }
+
+  getUserData() {
+    return _.pick(this.#User, ['firstName', 'lastName', 'email']);
+  }
 }
 
 class TestNotes {
