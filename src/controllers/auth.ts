@@ -26,17 +26,15 @@ const loginUser: RequestHandler = (req, res, next) => {
 };
 
 const getUser = asyncHandler(async (req, res, next) => {
-  if (req.isAuthenticated()) {
-    let user = req.user;
-    return sendToken(
-      {
-        success: true,
-        user: filterUser(user)
-      },
-      200,
-      res
-    );
-  }
+  let user = req.user;
+  return sendToken(
+    {
+      success: true,
+      user: filterUser(user)
+    },
+    200,
+    res
+  );
   throw new FailedRequest('User not found', 401);
 });
 const signUpUser = asyncHandler(async (req, res, next) => {

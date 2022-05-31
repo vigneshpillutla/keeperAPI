@@ -4,9 +4,11 @@ import { FailedRequest } from '../utils/error';
 import { sendToken } from '../utils';
 import auth from './auth';
 import notes from './notes';
+import users from './users';
 // import socialAuth from './socialAuth';
 
 const router = express.Router();
+router.use('/api/users', users);
 router.use('/api/auth', auth);
 router.use('/api/notes', notes);
 
