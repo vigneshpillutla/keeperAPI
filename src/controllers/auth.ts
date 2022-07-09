@@ -6,6 +6,7 @@ import asyncHandler from 'express-async-handler';
 import { sendToken } from '../utils';
 import { RequestHandler } from 'express';
 import _ from 'lodash';
+import passport from 'passport';
 
 const filterUser = (user: Express.User) => {
   const filteredUser = _.pick(user, ['firstName', 'lastName', 'email']);
@@ -20,6 +21,23 @@ const secret: RequestHandler = (req, res, next) => {
     msg: 'You are authorized!'
   });
 };
+
+const passportAuthenticateLocal: RequestHandler = (req, res, next) => {
+  passport.authenticate('local', (err, user, info) => {
+    if (err || !user) {
+      return next(new FailedRequest(info.message, 401));
+    }
+
+    req.logIn(user, (err) => {
+      if (err) {
+        return next(new FailedRequest('Login Failed', 500));
+      }
+    });
+
+    next();
+  })(req, res, next);
+};
+
 const loginUser: RequestHandler = (req, res, next) => {
   const user = req.user;
   sendToken({ success: true, user: filterUser(user) }, 200, res);
@@ -75,4 +93,11 @@ const logoutUser: RequestHandler = (req, res, next) => {
   );
 };
 
-export { loginUser, signUpUser, logoutUser, secret, getUser };
+export {
+  passportAuthenticateLocal,
+  loginUser,
+  signUpUser,
+  logoutUser,
+  secret,
+  getUser
+};

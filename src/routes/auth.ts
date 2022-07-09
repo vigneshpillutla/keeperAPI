@@ -6,16 +6,12 @@ import {
   signUpUser,
   logoutUser,
   secret,
-  getUser
+  getUser,
+  passportAuthenticateLocal
 } from '../controllers/auth';
 import { validateLogin, validateSignUp } from '../validation';
 
-router.post(
-  '/login',
-  validateLogin,
-  passport.authenticate('local', { failWithError: true }),
-  loginUser
-);
+router.post('/login', validateLogin, passportAuthenticateLocal, loginUser);
 
 router.post('/signUp', validateSignUp, signUpUser);
 

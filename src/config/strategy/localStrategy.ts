@@ -14,11 +14,11 @@ const localStrategy = new LocalStrategy(
     User.findOne({ email: username })
       .then((user) => {
         if (!user) {
-          return done(null, false);
+          return done(null, false, { message: 'User not found!' });
         }
         const { hash, salt } = user;
         if (!isValidPassword(password, hash, salt)) {
-          return done(null, false);
+          return done(null, false, { message: 'Password does not match!' });
         }
         return done(null, user);
       })
