@@ -1,4 +1,5 @@
 import connectMongo from 'connect-mongo';
+import { CookieOptions, SessionOptions } from 'express-session';
 import { SESSION_SECRET } from '../utils/secrets';
 import dbConfig from './database';
 
@@ -11,18 +12,21 @@ const sessionConfig = {
       collectionName: 'sessions',
       clientPromise: connectDB().then((m) => m.connection.getClient())
     });
-
-    return {
+    const cookie:CookieOptions = {
+      
+        // 1 week
+        maxAge: 604800000,
+        sameSite:'none'
+      
+    }
+    const sessionOptions:SessionOptions = {
       secret: SESSION_SECRET,
       resave: false,
       saveUninitialized: false,
       store: sessionStore,
-      cookie: {
-        // 1 week
-        maxAge: 604800000,
-        sameSite:'none'
-      }
-    };
+      cookie
+    }
+    return sessionOptions;
   }
 };
 
