@@ -16,6 +16,7 @@ const sessionConfig = {
       
         // 1 week
         maxAge: 604800000,
+        secure:true,
         sameSite:'none'
       
     }
