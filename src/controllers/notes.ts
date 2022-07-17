@@ -96,11 +96,15 @@ const deleteNote:RequestHandler = asyncHandler(async (req,res) => {
   const noteId = req.params.id;
 
   const filter = {
-    email,
-    'notes.id': noteId
+    email
   };
 
-  await UserNotes.deleteOne(filter);
+
+  await UserNotes.updateOne(filter,{
+    $pull:{
+      notes:{id:noteId}
+    }
+  })
 
   sendToken({success:true,msg:"Successfully deleted!"},201,res);
 })

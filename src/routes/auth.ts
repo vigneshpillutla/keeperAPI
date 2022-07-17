@@ -9,13 +9,13 @@ import {
   getUser,
   passportAuthenticateLocal
 } from '../controllers/auth';
-import { validateLogin, validateSignUp } from '../validation';
+import { ensureAuthenticated, validateLogin, validateSignUp } from '../validation';
 
 router.post('/login', validateLogin, passportAuthenticateLocal, loginUser);
 
 router.post('/signUp', validateSignUp, signUpUser);
 
-router.get('/user', getUser);
+router.get('/user', ensureAuthenticated ,getUser);
 
 router.get('/logout', logoutUser);
 
