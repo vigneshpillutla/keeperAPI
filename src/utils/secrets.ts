@@ -1,12 +1,15 @@
 import dotenv from 'dotenv';
 import fs from 'fs';
 
-if (fs.existsSync('.env')) {
-  dotenv.config({ path: '.env' });
-} else {
-  throw new Error(
-    'No .env file found. Configure dotenv or add .env to the root of the app.'
-  );
+if(process.env.NODE_ENV !== 'production'){
+
+  if (fs.existsSync('.env')) {
+    dotenv.config({ path: '.env' });
+  } else {
+    throw new Error(
+      'No .env file found. Configure dotenv or add .env to the root of the app.'
+    );
+  }
 }
 
 const PORT = process.env.PORT || 5000;
