@@ -19,7 +19,8 @@ const sessionConfig = {
       store: sessionStore,
       cookie: {
         // 1 week
-        maxAge: 604800000
+        maxAge: 604800000,
+        sameSite:"none"
       }
     };
   }
