@@ -43,7 +43,7 @@ const loginUser: RequestHandler = (req, res, next) => {
   sendToken({ success: true, user: filterUser(user) }, 200, res);
 };
 
-const getUser = asyncHandler(async (req, res, next) => {
+const getUser:RequestHandler = asyncHandler(async (req, res, next) => {
   let user = req.user;
   return sendToken(
     {

@@ -98,4 +98,11 @@ describe('Notes', () => {
 
     return expect(response.statusCode).toBe(403);
   });
+
+  it('Should delete a note',async () => {
+    const response = await agent.delete(`${notesDomain}/${singleNote.id}`);
+
+    console.log(response.body);
+    return expect(response.statusCode).toBe(201);
+  })
 });

@@ -91,4 +91,18 @@ const updateNote: RequestHandler = asyncHandler(async (req, res) => {
   );
 });
 
-export { addNote, getNotes, updateNote };
+const deleteNote:RequestHandler = asyncHandler(async (req,res) => {
+  const { email } = req.user;
+  const noteId = req.params.id;
+
+  const filter = {
+    email,
+    'notes.id': noteId
+  };
+
+  await UserNotes.deleteOne(filter);
+
+  sendToken({success:true,msg:"Successfully deleted!"},201,res);
+})
+
+export { addNote, getNotes, updateNote, deleteNote };
