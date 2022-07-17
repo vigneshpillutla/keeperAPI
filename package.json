@@ -5,7 +5,8 @@
   "scripts": {
     "test": "jest --detectOpenHandles",
     "start": "Set NODE_ENV=production&& node dist/server.js",
-    "start:prod":"tsc && node dist/server.js",
+    "build":"tsc",
+    "heroku-postbuild":"npm run build",
     "dev": "Set NODE_ENV=development&& nodemon --exec npx ts-node src/server.ts",
     "linux-dev":"NODE_ENV=development nodemon --exec npx ts-node src/server.ts"
   },
