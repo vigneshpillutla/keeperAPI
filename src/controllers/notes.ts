@@ -44,7 +44,7 @@ const getNotes: RequestHandler = asyncHandler(async (req, res) => {
   sendToken(
     {
       success: true,
-      data: userNotes.notes
+      data: userNotes?.notes ?? []
     },
     200,
     res
