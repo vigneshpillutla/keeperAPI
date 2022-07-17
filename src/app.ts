@@ -15,7 +15,7 @@ const app = express();
  * ---------Setup configs---------
  */
 //Add prod and dev strings here
-let whitelist = ['http://localhost:3000'];
+let whitelist = ['http://localhost:3000','https://keep-er.netlify.app'];
 let corsOptions: CorsOptions = {
   origin: function (origin, callback) {
     if (whitelist.indexOf(origin) !== -1 || !origin) {
