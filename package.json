@@ -4,7 +4,8 @@
   "description": "API for google keep clone.",
   "scripts": {
     "test": "jest --detectOpenHandles",
-    "start": "Set NODE_ENV=production&& node server.js",
+    "start": "NODE_ENV=production node server.js",
+    "windows-start":"Set NODE_ENV=production&& node server.js",
     "dev": "Set NODE_ENV=development&& nodemon --exec npx ts-node src/server.ts",
     "linux-dev":"NODE_ENV=development nodemon --exec npx ts-node src/server.ts"
   },
