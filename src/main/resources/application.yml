@@ -1,18 +1,12 @@
 spring:
   application:
     name: "Keeper API"
-  devtools:
-    restart:
-      enabled: true
-      additional-paths: src/main/java
-    livereload:
-      enabled: true
   datasource:
     url: ${DB_URL}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: update    # 🔹 Auto-creates tables if they don't exist
+      ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
