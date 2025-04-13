@@ -10,6 +10,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService {
@@ -22,6 +24,7 @@ public class UserService implements UserDetailsService {
         User user = User.builder()
                 .username(userDto.getUsername())
                 .password(userDto.getPassword())
+                .notes(new ArrayList<>())
                 .build();
         return userRepository.save(user);
     }
